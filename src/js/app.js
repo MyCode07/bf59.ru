@@ -126,8 +126,24 @@ function addObject(obj) {
 
     document.querySelector('.map__offices-total').classList.add('_active');
     const name = obj.querySelector('.map__office-name').textContent;
-    const kvadrat = +obj.querySelector('.kvadrat').textContent;
-    const price = +obj.querySelector('.cena').textContent;
+
+    let kvadrat = obj.querySelector('.kvadrat').textContent;
+    if (/,/.test(kvadrat)) {
+        kvadrat = +kvadrat.replace(',', '.');
+    }
+    else {
+        kvadrat = +kvadrat;
+    }
+
+    let price = obj.querySelector('.cena').textContent;
+    if (/,/.test(price)) {
+        price = +price.replace(',', '.');
+    }
+    else {
+        price = +price;
+    }
+
+
     const index = obj.dataset.index;
 
     let choosed = ` <div class="choosed" data-index="${index}">
@@ -147,8 +163,23 @@ function addObject(obj) {
 // remove offices from view
 function removeObject(obj) {
     const index = obj.dataset.index;
-    const kvadrat = +obj.querySelector('.kvadrat').textContent;
-    const price = +obj.querySelector('.cena').textContent;
+
+
+    let kvadrat = obj.querySelector('.kvadrat').textContent;
+    if (/,/.test(kvadrat)) {
+        kvadrat = +kvadrat.replace(',', '.');
+    }
+    else {
+        kvadrat = +kvadrat;
+    }
+
+    let price = obj.querySelector('.cena').textContent;
+    if (/,/.test(price)) {
+        price = +price.replace(',', '.');
+    }
+    else {
+        price = +price;
+    }
 
     obj.querySelector('.map__office-actions').classList.remove('_change');
     choosedOfices.querySelector(`[data-index="${index}"]`).remove();
@@ -184,8 +215,22 @@ function addOfficesToForm(obj) {
 function addIntoFormVsible(obj) {
     let formOfficeContainer = document.querySelector('.form__choosed-offices-items');
     let formOfficesBlock = document.querySelector('.form__choosed-offices');
-    let cena = +obj.querySelector('.cena').textContent;
-    let kvadrat = +obj.querySelector('.kvadrat').textContent;
+
+    let kvadrat = obj.querySelector('.kvadrat').textContent;
+    if (/,/.test(kvadrat)) {
+        kvadrat = +kvadrat.replace(',', '.');
+    }
+    else {
+        kvadrat = +kvadrat;
+    }
+
+    let cena = obj.querySelector('.cena').textContent;
+    if (/,/.test(cena)) {
+        cena = +cena.replace(',', '.');
+    }
+    else {
+        cena = +cena;
+    }
 
     let item = `<div class="form__office-added" data-index="${obj.dataset.index}" data-cena="${cena}" data-kvadrat="${kvadrat}">
                     <span>${obj.querySelector('.map__office-name').textContent}</span>
@@ -220,24 +265,50 @@ function removeOfficesFromForm(index) {
 
 // calc total when adding offices
 function calcTotalPlus(currPrice, currKvadrat) {
-    let totalkv = +totalKvadrat.textContent;
+    let totalkv = totalKvadrat.textContent;
+    if (/,/.test(totalkv)) {
+        totalkv = +totalkv.replace(',', '.');
+    }
+    else {
+        totalkv = +totalkv;
+    }
     totalkv += currKvadrat;
-    totalKvadrat.textContent = totalkv;
+    totalKvadrat.textContent = +totalkv.toFixed(1);;
 
-    let totalPr = +totalPrice.textContent;
+
+    let totalPr = totalPrice.textContent;
+    if (/,/.test(totalPr)) {
+        totalPr = +totalPr.replace(',', '.');
+    }
+    else {
+        totalPr = +totalPr;
+    }
     totalPr += currPrice;
-    totalPrice.textContent = totalPr;
+    totalPrice.textContent = +totalPr.toFixed(1);
 }
 
 // calc total when removing offices
 function calcTotalMinus(currPrice, currKvadrat) {
-    let totalkv = +totalKvadrat.textContent;
+    let totalkv = totalKvadrat.textContent;
+    if (/,/.test(totalkv)) {
+        totalkv = +totalkv.replace(',', '.');
+    }
+    else {
+        totalkv = +totalkv;
+    }
     totalkv -= currKvadrat;
-    totalKvadrat.textContent = totalkv;
+    totalKvadrat.textContent = +totalkv.toFixed(1);
 
-    let totalPr = +totalPrice.textContent;
+
+    let totalPr = totalPrice.textContent;
+    if (/,/.test(totalPr)) {
+        totalPr = +totalPr.replace(',', '.');
+    }
+    else {
+        totalPr = +totalPr;
+    }
     totalPr -= currPrice;
-    totalPrice.textContent = totalPr;
+    totalPrice.textContent = +totalPr.toFixed(1);
 }
 
 // show offices hovering on map items
@@ -245,10 +316,23 @@ const paths = document.querySelectorAll('[data-path]');
 let allowHover = true;
 document.addEventListener('mouseover', function (e) {
     const targetEl = e.target;
-    if (targetEl.classList.contains('path') && !targetEl.classList.contains('sold') && !isMobile.any() && allowHover == true) {
-        showOffices(targetEl);
+    if (targetEl.classList.contains('path') && !targetEl.classList.contains('nooffice') && !isMobile.any()) {
+        if (allowHover == true) {
+            showOffices(targetEl);
+        }
+        targetEl.classList.add('_active')
     }
 })
+
+paths.forEach(path => {
+    path.addEventListener('mouseleave', function (e) {
+        if (!path.classList.contains('_init') && !isMobile.any()) {
+            path.classList.remove('_active')
+        }
+    })
+})
+
+
 
 // show offices when when click or mouseover in map objects
 function showOffices(targetEl) {
@@ -271,6 +355,7 @@ function showOffices(targetEl) {
         item.style.position = 'absolute';
         item.style.pointerEvents = 'none';
     })
+
     slide.style.opacity = 1;
     slide.style.position = 'relative';
     slide.style.pointerEvents = 'all';
@@ -305,8 +390,25 @@ document.addEventListener('click', function (e) {
     // remove office button ( in choosed block)
     if (targetEl.classList.contains('choosed__remove')) {
         let choosed = targetEl.closest('.choosed')
-        const kvadrat = +choosed.querySelector('.kvadrat').textContent;
-        const price = +choosed.querySelector('.cena').textContent;
+
+
+
+        let kvadrat = choosed.querySelector('.kvadrat').textContent;
+        if (/,/.test(kvadrat)) {
+            kvadrat = +kvadrat.replace(',', '.');
+        }
+        else {
+            kvadrat = +kvadrat;
+        }
+
+        let price = choosed.querySelector('.cena').textContent;
+        if (/,/.test(price)) {
+            price = +price.replace(',', '.');
+        }
+        else {
+            price = +price;
+        }
+
         calcTotalMinus(price, kvadrat);
         choosed.remove();
 
@@ -323,8 +425,24 @@ document.addEventListener('click', function (e) {
 
     if (targetEl.classList.contains('form__office-remove')) {
         let addedOffice = targetEl.closest('.form__office-added')
-        const kvadrat = +addedOffice.dataset.kvadrat;
-        const price = +addedOffice.dataset.cena;
+
+        let kvadrat = addedOffice.dataset.kvadrat
+        if (/,/.test(kvadrat)) {
+            kvadrat = +kvadrat.replace(',', '.');
+        }
+        else {
+            kvadrat = +kvadrat;
+        }
+
+        let price = addedOffice.dataset.cena;
+        if (/,/.test(price)) {
+            price = +price.replace(',', '.');
+        }
+        else {
+            price = +price;
+        }
+
+
         calcTotalMinus(price, kvadrat);
 
 
@@ -411,14 +529,15 @@ document.addEventListener('click', function (e) {
     }
 
     // scroll to the office clicking on map object when <=640
-    if (targetEl.classList.contains('path') && !targetEl.classList.contains('sold')) {
+    if (targetEl.classList.contains('path') && !targetEl.classList.contains('nooffice')) {
         const index = +targetEl.dataset.path;
         const office = document.querySelector(`.map__office[data-index="${index}"]`);
         const allOffices = document.querySelectorAll('.map__office');
 
+
         document.querySelectorAll('.path').forEach(item => {
-            if (!item.classList.contains('sold')) {
-                item.style.fill = '#a1a9c6';
+            if (item.classList.contains('_active')) {
+                item.classList.remove('_active')
             }
         })
 
@@ -427,13 +546,13 @@ document.addEventListener('click', function (e) {
                 item.classList.remove('_active');
             })
 
-            targetEl.style.fill = '#53638f';
+            targetEl.classList.add('_active');
             allowHover = false
         }
         else {
             if (targetEl.classList.contains('_init')) {
                 targetEl.classList.remove('_init');
-                targetEl.style.fill = '#a1a9c6';
+                targetEl.classList.remove('_active');
                 allowHover = true;
             }
             else {
@@ -443,7 +562,7 @@ document.addEventListener('click', function (e) {
                     }
                 })
                 targetEl.classList.add('_init');
-                targetEl.style.fill = '#53638f';
+                targetEl.classList.add('_active');
                 allowHover = false;
             }
         }
@@ -654,3 +773,12 @@ if (footerImage) {
         }
     })
 }
+
+document.querySelector('.map__map svg').addEventListener('mouseleave', function () {
+    if (window.innerWidth > 1024) {
+        if (allowHover == true) {
+            document.querySelector('.map__content-welcom').classList.remove('_remove');
+            document.querySelector('.map__offices').classList.remove('_active');
+        }
+    }
+});

@@ -855,7 +855,7 @@ body {
         transition: all 1.3s ease 0s;
         position: fixed;
         left: 0;
-        z-index: -1;
+        z-index: -7;
         width: 100%;
         display: flex;
         justify-content: flex-end;
@@ -871,23 +871,33 @@ body {
     }
 }
 
-path:not(.sold) {
-    transition: all 0.3s ease 0s;
-    // fill: #a1a9c6;
+.path:not(.nooffice) {
     cursor: pointer;
+    transition: all 0.3s ease 0s;
+
+    &._active {
+        fill: #53638f;
+    }
 
     @media (any-hover: hover) {
         &:hover {
-            fill: #53638f;
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             filter: url(#shadow);
         }
     }
 }
 
+path:not(.sold) {
+    fill: #a1a9c6;
+}
+
 path.sold {
-    cursor: no-drop;
     fill: #d6d8dc;
+}
+
+path.nooffice {
+    fill: #d6d8dc;
+    cursor: no-drop;
 }
 
 .map {
@@ -1089,7 +1099,6 @@ path.sold {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    
 
     @media (max-width: 768px) {
         padding: 0 25px;
@@ -1125,7 +1134,6 @@ path.sold {
             &:hover {
                 img {
                     transform: rotate(180deg);
-
                 }
             }
         }
@@ -1175,7 +1183,6 @@ path.sold {
         align-items: center;
         justify-content: center;
         width: 100%;
-
 
         button {
             @include adaptive-value("width", 30, 20, 1);
@@ -1275,12 +1282,14 @@ path.sold {
 
     @media (min-width: 1025px) {
         left: 58px;
+        z-index: -2;
     }
 
     &._active {
         position: relative;
         opacity: 1;
         pointer-events: all;
+        z-index: 2;
     }
 
     @media (max-width: 1024px) {
